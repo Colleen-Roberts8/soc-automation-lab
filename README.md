@@ -1,29 +1,51 @@
 # soc-automation-lab
-Automated SOC Incident Response &amp; Threat Intelligence Pipeline using Wazuh, Shuffle SOAR, VirtusTotal API, and TheHive 5.
+Automated SOC Incident Response & Threat Intelligence Pipeline using Wazuh, Shuffle SOAR, VirtusTotal API, and TheHive 5.
 
-# Automated SOC Incident Response & Threat Intelligence Pipiline
+# Automated SOC Incident Response & Threat Intelligence Pipeline
 
 ## Overview
-This project demonstrates an automated Security Operations Center (SOC) workflow designed to detect endpoint threats, enrich alert telemetry, and automate incident ticketing in real time.
+This project demonstrates an end-to-end automated Security Operations Center (SOC) workflow. It captures endpoint security events generated on a Windows 11 host, processes them through a SIEM, enriches threat telemetry using SOAR playbooks, and automates alert management and analyst notifications.
+
+---
 
 ## Architecture & Data Flow
-1. **Detection:** Windows 11 Endpoint generates security events (e.g., Mimikatz credential dumping / T1003).
-2. **SIEM Analysis:** Wazuh Manager parses and triggers an alert via rule '100002'.
-3. **SOAR Orchestration:** Shuffle SOAR catches the Wazuh webhook payload.
-4. **Regex Extraction:** SHA-256 hashes are extracted from event logs using dynamic regex parsing.
-5. **Threat Intelligence Enrichment:** Shuffle queries VirusTotal v3 API for file reputation analysis.
-6. **Incident Management:** Enriched alerts are automatically created in TheHive 5 for analyst triage.
-7. **Notification:** Automated email alerts are dispatched to the SOC team.
+1. **Detection:** Windows 11 host detects credential dumping activity (`Mimikatz` / MITRE ATT&CK T1003).
+2. **SIEM Processing:** Wazuh Manager parses the alert log and triggers a webhook via rule `100002`.
+3. **SOAR Automation:** Shuffle SOAR receives the JSON webhook payload.
+4. **Data Extraction:** Dynamic Regex parsing extracts the file's SHA-256 hash string.
+5. **Threat Enrichment:** Shuffle queries the VirusTotal v3 API for file reputation analysis.
+6. **Incident Ticketing:** Enriched alert details automatically populate inside TheHive 5 for analyst triage.
+7. **Analyst Alerting:** An automated email notification is dispatched to the SOC team.
 
-## Technologies & Frameworks
+---
+
+## Workflow & Evidence
+
+### 1. Shuffle SOAR Workflow Construction
+*Automated playbook connecting the Wazuh Webhook, SHA-256 Regex Parser, VirusTotal Enrichment, TheHive Incident Creation, and Email Alerting.*
+
+![Shuffle Workflow](shuffle-workflow.png)
+
+---
+
+### 2. Incident Generation in TheHive 5
+*Successful creation of the "Mimikatz Usage Detected" alert in TheHive 5, complete with dynamic reference IDs and severity mappings.*
+
+![TheHive Alert Verification](thehive-alerts.png)
+
+---
+
+### 3. Automated Analyst Email Notification
+*Real-time email alert dispatched via Shuffle upon threat verification.*
+
+![Email Notification](email-notification.png)
+
+---
+
+## 🛠️ Technologies Used
 * **SIEM:** Wazuh
 * **SOAR:** Shuffle SOAR
-* **Threat Intel:** VirusTotal v3 API
-* **Incident Response:** TheHive 5
-* **Virtualization/OS:** Ubuntu Server, Windows 11 Enterprise, VirtualBox
-* **Frameworks:** MITRE ATTACK (T1003 - Credential Dumping)
-
-## Key Achievements & Learnings
-* Configured REST API authentication, custom service accounts, and API keys across isolated security tools.
-* Handled dynamic variable mapping in Shuffle ('$exec.id', '$Webhook_1.body...') to overcome payload formatting and duplicate entry errors,
-* Engineering custom integration blocks in 'ossec.conf' for real-time webhook delivery.
+* **Threat Intelligence:** VirusTotal v3 API
+* **Incident Management:** TheHive 5
+* **OS / Virtualization:** Ubuntu Server 22.04 LTS, Windows 11 Enterprise, VirtualBox
+* **Protocols & Concepts:** REST APIs, Webhooks, JSON Parsing, Regex, MITRE ATT&CK Framework
