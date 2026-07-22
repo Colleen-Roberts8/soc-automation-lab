@@ -42,7 +42,7 @@ This project demonstrates an end-to-end automated Security Operations Center (SO
 
 ---
 
-## 🛠️ Technologies Used
+## Technologies Used
 * **SIEM:** Wazuh
 * **SOAR:** Shuffle SOAR
 * **Threat Intelligence:** VirusTotal v3 API
